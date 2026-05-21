@@ -22,6 +22,7 @@ from core import store
 from core.database import add_event
 
 log = logging.getLogger("PrinterMonitor")
+_toner_report_lock = threading.Lock()
 
 # ─── تنظیمات ─────────────────────────────────────────────────────
 ENHANCED_TIMEOUT = 3.0   # timeout برای هر OID
@@ -50,9 +51,15 @@ BROTHER_DRUM_OID = "1.3.6.1.4.1.2435.2.3.9.4.2.1.5.5.1.2"
 # ─── توابع کمکی ───────────────────────────────────────────────────
 def _log_to_toner_report(content: str):
     """اضافه کردن خط به فایل toner_report.txt"""
+    _append_toner_report_lines([content])
+
+
+def _append_toner_report_lines(lines: List[str]):
+    """نوشتن اتمیک چند خط در toner_report.txt برای جلوگیری از تداخل threadها"""
     try:
-        with open("toner_report.txt", "a", encoding="utf-8") as f:
-            f.write(content + "\n")
+        with _toner_report_lock:
+            with open("toner_report.txt", "a", encoding="utf-8") as f:
+                f.write("\n".join(lines) + "\n")
     except Exception as e:
         log.error(f"خطا در نوشتن toner_report: {e}")
 
@@ -411,16 +418,19 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
     community = printer.get("community", "public")
     brand = printer.get("brand", "").lower()
     start_time = time.time()
+    report_lines = [
+        f"\n{'='*80}",
+        f"🖨  {name} ({ip}) | زمان: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+    ]
     
     log.info(f"[ENHANCED] Polling {name} ({ip})")
-    _log_to_toner_report(f"\n{'='*80}")
-    _log_to_toner_report(f"🖨  {name} ({ip}) | زمان: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
     # ─── تشخیص SNMP ───────────────────────────────────────────────
     snmp_version = detect_snmp_version(ip, community, timeout=2.0)
     if snmp_version is None:
         elapsed = int((time.time() - start_time) * 1000)
-        _log_to_toner_report(f"   ❌ بدون پاسخ SNMP")
+        report_lines.append("   ❌ بدون پاسخ SNMP")
+        _append_toner_report_lines(report_lines)
         return {
             "ip": ip, "name": name, "nickname": nickname, "brand": brand,
             "online": False, "last_poll": datetime.now().isoformat(), "poll_ms": elapsed,
@@ -498,6 +508,10 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
         if val and str(val).strip() not in ("", "N/A", "None"):
             model = str(val).strip()[:100]
             break
+    if model == "Unknown" and sys_desc_str:
+        model_fallback = sys_desc_str.strip().split(",")[0].strip()
+        if model_fallback:
+            model = model_fallback[:100]
     
     serial_oids = [
         "1.3.6.1.2.1.43.5.1.1.17.1",
@@ -527,14 +541,23 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
                 color_key = "yellow"
             else:
                 color_key = "black"  # fallback
-            
-            toners[color_key] = {
+
+            candidate = {
                 "level": s["percent"],
                 "status": s["status"] if s["status"] != "N/A" else "unknown",
                 "name": s["name"],
                 "remaining": s["remaining"],
                 "max": s["max"],
             }
+
+            existing = toners.get(color_key)
+            if not existing:
+                toners[color_key] = candidate
+            else:
+                existing_score = (1 if existing.get("level") is not None else 0, existing.get("status") not in ("unknown", "N/A"))
+                candidate_score = (1 if candidate.get("level") is not None else 0, candidate.get("status") not in ("unknown", "N/A"))
+                if candidate_score > existing_score:
+                    toners[color_key] = candidate
     
     # اگر تونری پیدا نشد، یک تونر مشکی پیش‌فرض
     if not toners:
@@ -558,13 +581,14 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
     elapsed = int((time.time() - start_time) * 1000)
     
     # ─── ثبت در toner_report.txt ─────────────────────────────────
-    _log_to_toner_report(f"   SNMP v{snmp_version} | مدل: {model} | نوع: {device_type}")
-    _log_to_toner_report(f"   کل صفحات: {total:,} | رنگی: {color if color else 0:,} | سیاه‌سفید: {bw:,}")
+    report_lines.append(f"   SNMP v{snmp_version} | مدل: {model} | نوع: {device_type}")
+    report_lines.append(f"   کل صفحات: {total:,} | رنگی: {color if color else 0:,} | سیاه‌سفید: {bw:,}")
     for color_key, t in toners.items():
         pct_str = f"{t['level']}%" if t['level'] is not None else "N/A"
         status_icon = {"ok": "✅", "low": "🟡", "critical": "🟠", "empty": "🔴"}.get(t["status"], "❓")
-        _log_to_toner_report(f"   {color_key}: {pct_str} {status_icon}")
-    _log_to_toner_report(f"   زمان پاسخ: {elapsed}ms")
+        report_lines.append(f"   {color_key}: {pct_str} {status_icon}")
+    report_lines.append(f"   زمان پاسخ: {elapsed}ms")
+    _append_toner_report_lines(report_lines)
     
     # ─── ذخیره در دیتابیس (printer_counters) ────────────────────
     if save_to_db:
@@ -605,22 +629,55 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
     # ─── ثبت رویداد PRINT ───────────────────────────────────────
     prev = store._prev.get(ip) or {}
     prev_total = prev.get("print_total")
-    
-    if prev_total is not None and total > prev_total:
-        delta = total - prev_total
-        if 0 < delta <= 1000:  # دلتای منطقی
-            add_event(ip, "PRINT", {
-                "message": f"{delta} صفحه چاپ شد",
-                "pages": delta,
-                "color": "رنگی" if color and color > prev.get("full_color", 0) else "سیاه‌سفید",
-                "severity": "info"
+    prev_fc = prev.get("full_color", 0) if prev else 0
+    prev_bw = prev.get("black_white", bw) if prev else bw
+    next_total = total
+    next_fc = color if color is not None else (prev_fc if prev_total is not None else 0)
+    next_bw = bw
+
+    if prev_total is None:
+        log.info(f"[ENHANCED] Baseline counters set for {ip}: total={total:,}")
+    elif total == 0 and prev_total > 1000:
+        log.warning(f"[ENHANCED] Ignoring suspicious total=0 for {ip} (prev={prev_total:,})")
+        next_total = prev_total
+        next_fc = prev_fc
+        next_bw = prev_bw
+    elif total < prev_total:
+        drop = prev_total - total
+        if drop > 5000:
+            add_event(ip, "COUNTER_RESET", {
+                "message": f"شمارنده از {prev_total:,} به {total:,} کاهش یافت (ریست دستگاه)",
+                "severity": "warning",
+                "prev_total": prev_total,
+                "current_total": total,
             })
-    
+        else:
+            log.warning(f"[ENHANCED] Ignoring transient counter drop for {ip}: {prev_total:,} -> {total:,}")
+            next_total = prev_total
+            next_fc = prev_fc
+            next_bw = prev_bw
+    elif total > prev_total:
+        delta = total - prev_total
+        color_delta = (color - prev_fc) if (color is not None and prev_fc is not None) else 0
+        if color_delta > 0 and color_delta < delta:
+            color_label = "مختلط"
+        elif color_delta > 0:
+            color_label = "رنگی"
+        else:
+            color_label = "سیاه‌سفید"
+
+        add_event(ip, "PRINT", {
+            "message": f"{delta} صفحه چاپ شد",
+            "pages": delta,
+            "color": color_label,
+            "severity": "info"
+        })
+
     # ذخیره مقادیر جدید در prev
     store._prev.set(ip, {
-        "print_total": total,
-        "full_color": color if color else 0,
-        "black_white": bw,
+        "print_total": next_total,
+        "full_color": next_fc if next_fc is not None else 0,
+        "black_white": next_bw,
         "alert_codes": [a["code"] for a in alerts],
     })
     

@@ -52,7 +52,8 @@ function escapeHtml(str) {
 // ══════════════════════════════════════════════════
 let allData     = [];
 let allEvents   = [];
-let countdown   = POLL_INT;
+let pollIntervalSec = (typeof POLL_INT === 'number' && POLL_INT > 0) ? POLL_INT : 30;
+let countdown   = pollIntervalSec;
 let countTimer  = null;
 let isFirst     = true;
 let serverInfo  = {};
@@ -324,6 +325,10 @@ async function fetchData() {
     allData   = pr.printers || [];
     allEvents = lg.events   || [];
     serverInfo = st;
+    const serverPoll = Number((pr.meta && pr.meta.poll_interval) ?? st.poll_interval);
+    if (Number.isFinite(serverPoll) && serverPoll > 0) {
+      pollIntervalSec = serverPoll;
+    }
     updateMeta(pr.meta, st);
     rebuildTabs(allData);
     renderOverviewCards(allData);
@@ -1649,11 +1654,12 @@ async function triggerPoll() {
 }
 
 function resetCountdown() {
-  countdown = POLL_INT;
+  countdown = pollIntervalSec;
   if (countTimer) clearInterval(countTimer);
   countTimer = setInterval(()=>{
     countdown = Math.max(0, countdown-1);
-    document.getElementById('cfill').style.width = (countdown/POLL_INT*100)+'%';
+    const denom = pollIntervalSec > 0 ? pollIntervalSec : 1;
+    document.getElementById('cfill').style.width = (countdown/denom*100)+'%';
     if (countdown<=0) { clearInterval(countTimer); fetchData(); }
   },1000);
 }
