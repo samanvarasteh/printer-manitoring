@@ -1,0 +1,22 @@
+# =====================================================
+# Toshiba e-STUDIO Monitor v2 - Requirements
+# Python version: 3.8+ (recommended 3.10+)
+# =====================================================
+#
+# ایجاد و فعال‌سازی محیط مجازی (venv):
+#
+#   Windows:
+#       python -m venv venv
+#       venv\Scripts\activate
+#
+#   Linux / macOS:
+#       python3 -m venv venv
+#       source venv/bin/activate
+#
+# سپس نصب وابستگی‌ها:
+#       pip install -r requirements.txt
+#
+# =====================================================
+
+Flask>=3.1.2
+openpyxl>=3.1.2

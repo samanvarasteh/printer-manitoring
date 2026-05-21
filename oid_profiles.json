@@ -1,0 +1,1172 @@
+{
+  "172.16.25.55": {
+    "ip": "172.16.25.55",
+    "brand": "toshiba",
+    "device_type": "color",
+    "scanned_at": "2026-05-20T09:23:00.785352",
+    "scan_ms": 136,
+    "oid_total": 69,
+    "oid_active": 35,
+    "oid_inactive": 0,
+    "oid_rejected": 0,
+    "oids": {
+      "sys_descr": {
+        "oid": "1.3.6.1.2.1.1.1.0",
+        "type": "str",
+        "category": "sys",
+        "description": "توضیح سیستم",
+        "unit": "str",
+        "active": true,
+        "last_value": "TOSHIBA e-STUDIO3518A"
+      },
+      "sys_uptime": {
+        "oid": "1.3.6.1.2.1.1.3.0",
+        "type": "int",
+        "category": "sys",
+        "description": "uptime",
+        "unit": "str",
+        "active": true,
+        "last_value": "84181200"
+      },
+      "sys_hostname": {
+        "oid": "1.3.6.1.2.1.1.5.0",
+        "type": "str",
+        "category": "sys",
+        "description": "hostname",
+        "unit": "str",
+        "active": true,
+        "last_value": "TOSHIBA e-STUDIO3518A"
+      },
+      "toner_name_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.6.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "نام تونر 1",
+        "unit": "str",
+        "active": true,
+        "last_value": "Black Toner"
+      },
+      "toner_max_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.8.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "ظرفیت تونر",
+        "unit": "dots",
+        "active": true,
+        "last_value": "100"
+      },
+      "toner_remain_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.9.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "باقی‌مانده تونر",
+        "unit": "dots",
+        "active": true,
+        "last_value": "82"
+      },
+      "tray1_name": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.13.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "نام سینی 1",
+        "unit": "str",
+        "active": true,
+        "last_value": "Drawer 1"
+      },
+      "tray1_cap": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.9.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "ظرفیت سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "550"
+      },
+      "tray1_level": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.10.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "0"
+      },
+      "tray2_name": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.13.1.2",
+        "type": "str",
+        "category": "identity",
+        "description": "نام سینی 2",
+        "unit": "str",
+        "active": true,
+        "last_value": "Drawer 2"
+      },
+      "tray2_cap": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.9.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "ظرفیت سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "550"
+      },
+      "tray2_level": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.10.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "25"
+      },
+      "cover_status": {
+        "oid": "1.3.6.1.2.1.43.6.1.1.3.1.1",
+        "type": "int",
+        "category": "status",
+        "description": "وضعیت درب",
+        "unit": "code",
+        "active": true,
+        "last_value": "4"
+      },
+      "tsh_model": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.2.3.1.3.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "مدل Toshiba",
+        "unit": "str",
+        "active": true,
+        "last_value": "TOSHIBA e-STUDIO3518A"
+      },
+      "tsh_serial": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.2.4.1.8.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "سریال Toshiba",
+        "unit": "str",
+        "active": true,
+        "last_value": "TG01SY0W1302"
+      },
+      "tsh_firmware": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.2.3.1.4.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "فریمور Toshiba",
+        "unit": "str",
+        "active": true,
+        "last_value": "V22.3.0.615.303"
+      },
+      "tsh_total": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.2.1.4",
+        "type": "int",
+        "category": "counter",
+        "description": "کل چاپ Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "116306"
+      },
+      "tsh_color": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.2.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "رنگی Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_bw": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.2.1.3",
+        "type": "int",
+        "category": "counter",
+        "description": "سیاه‌سفید Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "116306"
+      },
+      "tsh_copy_fc": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.4.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "کپی FC Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_copy_bw": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.4.1.3",
+        "type": "int",
+        "category": "counter",
+        "description": "کپی BW Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "50142"
+      },
+      "tsh_print_fc": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.3.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "پرینت FC Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_print_bw": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.3.1.3",
+        "type": "int",
+        "category": "counter",
+        "description": "پرینت BW Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "65883"
+      },
+      "tsh_twin": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.2.1.2",
+        "type": "int",
+        "category": "counter",
+        "description": "Twin/Mono Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_fax": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.7.1.4",
+        "type": "int",
+        "category": "counter",
+        "description": "فکس Toshiba",
+        "unit": "pages",
+        "active": true,
+        "last_value": "238"
+      },
+      "tsh_scan_fc": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.9.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "اسکن رنگی Toshiba",
+        "unit": "pages",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_scan_bw": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.9.1.3",
+        "type": "int",
+        "category": "counter",
+        "description": "اسکن سیاه‌سفید Toshiba",
+        "unit": "pages",
+        "active": true,
+        "last_value": "9699"
+      },
+      "tsh_t1_level": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.5.1.1.5.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 1 Toshiba",
+        "unit": "%",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_t2_level": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.5.1.1.5.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 2 Toshiba",
+        "unit": "%",
+        "active": true,
+        "last_value": "25"
+      },
+      "tsh_t1_size": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.5.1.1.4.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "اندازه کاغذ سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "3"
+      },
+      "tsh_t2_size": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.5.1.1.4.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "اندازه کاغذ سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "4"
+      },
+      "tsh_cyan_st": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.8.1.3.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "وضعیت Cyan",
+        "unit": "dots",
+        "active": true,
+        "last_value": "6"
+      },
+      "tsh_mag_st": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.8.1.3.1.2",
+        "type": "int",
+        "category": "supply",
+        "description": "وضعیت Magenta",
+        "unit": "dots",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_yel_st": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.8.1.3.1.3",
+        "type": "int",
+        "category": "supply",
+        "description": "وضعیت Yellow",
+        "unit": "dots",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_blk_st": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.8.1.3.1.4",
+        "type": "int",
+        "category": "supply",
+        "description": "وضعیت Black",
+        "unit": "dots",
+        "active": true,
+        "last_value": "0"
+      }
+    },
+    "current_vals": {
+      "sys_descr": "TOSHIBA e-STUDIO3518A",
+      "sys_uptime": "84181200",
+      "sys_hostname": "TOSHIBA e-STUDIO3518A",
+      "toner_name_1": "Black Toner",
+      "toner_max_1": "100",
+      "toner_remain_1": "82",
+      "tray1_name": "Drawer 1",
+      "tray1_cap": "550",
+      "tray1_level": "0",
+      "tray2_name": "Drawer 2",
+      "tray2_cap": "550",
+      "tray2_level": "25",
+      "cover_status": "4",
+      "tsh_model": "TOSHIBA e-STUDIO3518A",
+      "tsh_serial": "TG01SY0W1302",
+      "tsh_firmware": "V22.3.0.615.303",
+      "tsh_total": "116306",
+      "tsh_color": "0",
+      "tsh_bw": "116306",
+      "tsh_copy_fc": "0",
+      "tsh_copy_bw": "50142",
+      "tsh_print_fc": "0",
+      "tsh_print_bw": "65883",
+      "tsh_twin": "0",
+      "tsh_fax": "238",
+      "tsh_scan_fc": "0",
+      "tsh_scan_bw": "9699",
+      "tsh_t1_level": "0",
+      "tsh_t2_level": "25",
+      "tsh_t1_size": "3",
+      "tsh_t2_size": "4",
+      "tsh_cyan_st": "6",
+      "tsh_mag_st": "0",
+      "tsh_yel_st": "0",
+      "tsh_blk_st": "0"
+    },
+    "rejected_oids": {},
+    "summary": {
+      "model": "TOSHIBA e-STUDIO3518A",
+      "serial": "TG01SY0W1302",
+      "brand": "toshiba",
+      "total_pages": 116306,
+      "toner_pct": 82,
+      "device_type": "color"
+    }
+  },
+  "172.16.25.57": {
+    "ip": "172.16.25.57",
+    "brand": "unknown",
+    "device_type": "mono",
+    "scanned_at": "2026-05-20T09:31:19.010068",
+    "scan_ms": 498131,
+    "oid_total": 69,
+    "oid_active": 0,
+    "oid_inactive": 0,
+    "oid_rejected": 0,
+    "oids": {},
+    "current_vals": {},
+    "rejected_oids": {},
+    "summary": {
+      "model": "Unknown",
+      "serial": "N/A",
+      "brand": "unknown",
+      "total_pages": 0,
+      "toner_pct": 0,
+      "device_type": "mono"
+    }
+  },
+  "172.16.25.54": {
+    "ip": "172.16.25.54",
+    "brand": "toshiba",
+    "device_type": "color",
+    "scanned_at": "2026-05-20T14:21:08.251502",
+    "scan_ms": 1649,
+    "oid_total": 69,
+    "oid_active": 38,
+    "oid_inactive": 0,
+    "oid_rejected": 0,
+    "oids": {
+      "sys_descr": {
+        "oid": "1.3.6.1.2.1.1.1.0",
+        "type": "str",
+        "category": "sys",
+        "description": "توضیح سیستم",
+        "unit": "str",
+        "active": true,
+        "last_value": "TOSHIBA e-STUDIO2050C"
+      },
+      "sys_uptime": {
+        "oid": "1.3.6.1.2.1.1.3.0",
+        "type": "int",
+        "category": "sys",
+        "description": "uptime",
+        "unit": "str",
+        "active": true,
+        "last_value": "121761700"
+      },
+      "sys_hostname": {
+        "oid": "1.3.6.1.2.1.1.5.0",
+        "type": "str",
+        "category": "sys",
+        "description": "hostname",
+        "unit": "str",
+        "active": true,
+        "last_value": "TOSHIBA e-STUDIO2050C"
+      },
+      "toner_name_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.6.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "نام تونر 1",
+        "unit": "str",
+        "active": true,
+        "last_value": "Black Toner"
+      },
+      "toner_max_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.8.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "ظرفیت تونر",
+        "unit": "dots",
+        "active": true,
+        "last_value": "100"
+      },
+      "toner_remain_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.9.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "باقی‌مانده تونر",
+        "unit": "dots",
+        "active": true,
+        "last_value": "1"
+      },
+      "toner_name_2": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.6.1.2",
+        "type": "str",
+        "category": "identity",
+        "description": "نام تونر/درام 2",
+        "unit": "str",
+        "active": true,
+        "last_value": "Cyan Toner"
+      },
+      "toner_max_2": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.8.1.2",
+        "type": "int",
+        "category": "supply",
+        "description": "ظرفیت درام",
+        "unit": "dots",
+        "active": true,
+        "last_value": "100"
+      },
+      "toner_remain_2": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.9.1.2",
+        "type": "int",
+        "category": "supply",
+        "description": "باقی‌مانده درام",
+        "unit": "dots",
+        "active": true,
+        "last_value": "45"
+      },
+      "tray1_name": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.13.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "نام سینی 1",
+        "unit": "str",
+        "active": true,
+        "last_value": "Drawer 1"
+      },
+      "tray1_cap": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.9.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "ظرفیت سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "250"
+      },
+      "tray1_level": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.10.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "100"
+      },
+      "tray2_name": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.13.1.2",
+        "type": "str",
+        "category": "identity",
+        "description": "نام سینی 2",
+        "unit": "str",
+        "active": true,
+        "last_value": "Drawer 2"
+      },
+      "tray2_cap": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.9.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "ظرفیت سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "550"
+      },
+      "tray2_level": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.10.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "25"
+      },
+      "cover_status": {
+        "oid": "1.3.6.1.2.1.43.6.1.1.3.1.1",
+        "type": "int",
+        "category": "status",
+        "description": "وضعیت درب",
+        "unit": "code",
+        "active": true,
+        "last_value": "4"
+      },
+      "tsh_model": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.2.3.1.3.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "مدل Toshiba",
+        "unit": "str",
+        "active": true,
+        "last_value": "TOSHIBA e-STUDIO2050C"
+      },
+      "tsh_serial": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.2.4.1.8.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "سریال Toshiba",
+        "unit": "str",
+        "active": true,
+        "last_value": "T569SY0W2173"
+      },
+      "tsh_firmware": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.2.3.1.4.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "فریمور Toshiba",
+        "unit": "str",
+        "active": true,
+        "last_value": "V8.0.0.513.01"
+      },
+      "tsh_total": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.2.1.4",
+        "type": "int",
+        "category": "counter",
+        "description": "کل چاپ Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "158483"
+      },
+      "tsh_color": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.2.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "رنگی Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "35460"
+      },
+      "tsh_bw": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.2.1.3",
+        "type": "int",
+        "category": "counter",
+        "description": "سیاه‌سفید Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "123023"
+      },
+      "tsh_copy_fc": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.4.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "کپی FC Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "4206"
+      },
+      "tsh_copy_bw": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.4.1.3",
+        "type": "int",
+        "category": "counter",
+        "description": "کپی BW Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "26851"
+      },
+      "tsh_print_fc": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.3.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "پرینت FC Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "31254"
+      },
+      "tsh_print_bw": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.3.1.3",
+        "type": "int",
+        "category": "counter",
+        "description": "پرینت BW Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "94048"
+      },
+      "tsh_twin": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.2.1.2",
+        "type": "int",
+        "category": "counter",
+        "description": "Twin/Mono Toshiba ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "0"
+      },
+      "tsh_fax": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.7.1.4",
+        "type": "int",
+        "category": "counter",
+        "description": "فکس Toshiba",
+        "unit": "pages",
+        "active": true,
+        "last_value": "1965"
+      },
+      "tsh_scan_fc": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.9.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "اسکن رنگی Toshiba",
+        "unit": "pages",
+        "active": true,
+        "last_value": "3216"
+      },
+      "tsh_scan_bw": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.6.1.9.1.3",
+        "type": "int",
+        "category": "counter",
+        "description": "اسکن سیاه‌سفید Toshiba",
+        "unit": "pages",
+        "active": true,
+        "last_value": "18965"
+      },
+      "tsh_t1_level": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.5.1.1.5.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 1 Toshiba",
+        "unit": "%",
+        "active": true,
+        "last_value": "100"
+      },
+      "tsh_t2_level": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.5.1.1.5.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 2 Toshiba",
+        "unit": "%",
+        "active": true,
+        "last_value": "25"
+      },
+      "tsh_t1_size": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.5.1.1.4.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "اندازه کاغذ سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "3"
+      },
+      "tsh_t2_size": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.5.1.1.4.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "اندازه کاغذ سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "4"
+      },
+      "tsh_cyan_st": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.8.1.3.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "وضعیت Cyan",
+        "unit": "dots",
+        "active": true,
+        "last_value": "3"
+      },
+      "tsh_mag_st": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.8.1.3.1.2",
+        "type": "int",
+        "category": "supply",
+        "description": "وضعیت Magenta",
+        "unit": "dots",
+        "active": true,
+        "last_value": "6"
+      },
+      "tsh_yel_st": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.8.1.3.1.3",
+        "type": "int",
+        "category": "supply",
+        "description": "وضعیت Yellow",
+        "unit": "dots",
+        "active": true,
+        "last_value": "7"
+      },
+      "tsh_blk_st": {
+        "oid": "1.3.6.1.4.1.1129.2.3.50.1.3.21.8.1.3.1.4",
+        "type": "int",
+        "category": "supply",
+        "description": "وضعیت Black",
+        "unit": "dots",
+        "active": true,
+        "last_value": "8"
+      }
+    },
+    "current_vals": {
+      "sys_descr": "TOSHIBA e-STUDIO2050C",
+      "sys_uptime": "121761700",
+      "sys_hostname": "TOSHIBA e-STUDIO2050C",
+      "toner_name_1": "Black Toner",
+      "toner_max_1": "100",
+      "toner_remain_1": "1",
+      "toner_name_2": "Cyan Toner",
+      "toner_max_2": "100",
+      "toner_remain_2": "45",
+      "tray1_name": "Drawer 1",
+      "tray1_cap": "250",
+      "tray1_level": "100",
+      "tray2_name": "Drawer 2",
+      "tray2_cap": "550",
+      "tray2_level": "25",
+      "cover_status": "4",
+      "tsh_model": "TOSHIBA e-STUDIO2050C",
+      "tsh_serial": "T569SY0W2173",
+      "tsh_firmware": "V8.0.0.513.01",
+      "tsh_total": "158483",
+      "tsh_color": "35460",
+      "tsh_bw": "123023",
+      "tsh_copy_fc": "4206",
+      "tsh_copy_bw": "26851",
+      "tsh_print_fc": "31254",
+      "tsh_print_bw": "94048",
+      "tsh_twin": "0",
+      "tsh_fax": "1965",
+      "tsh_scan_fc": "3216",
+      "tsh_scan_bw": "18965",
+      "tsh_t1_level": "100",
+      "tsh_t2_level": "25",
+      "tsh_t1_size": "3",
+      "tsh_t2_size": "4",
+      "tsh_cyan_st": "3",
+      "tsh_mag_st": "6",
+      "tsh_yel_st": "7",
+      "tsh_blk_st": "8"
+    },
+    "rejected_oids": {},
+    "summary": {
+      "model": "TOSHIBA e-STUDIO2050C",
+      "serial": "T569SY0W2173",
+      "brand": "toshiba",
+      "total_pages": 158483,
+      "toner_pct": 1,
+      "device_type": "color"
+    }
+  },
+  "172.16.25.148": {
+    "ip": "172.16.25.148",
+    "brand": "canon",
+    "device_type": "mono",
+    "scanned_at": "2026-05-21T09:33:22.686284",
+    "scan_ms": 165,
+    "oid_total": 69,
+    "oid_active": 21,
+    "oid_inactive": 0,
+    "oid_rejected": 0,
+    "oids": {
+      "sys_descr": {
+        "oid": "1.3.6.1.2.1.1.1.0",
+        "type": "str",
+        "category": "sys",
+        "description": "توضیح سیستم",
+        "unit": "str",
+        "active": true,
+        "last_value": "Canon MF230 Series /P"
+      },
+      "sys_uptime": {
+        "oid": "1.3.6.1.2.1.1.3.0",
+        "type": "int",
+        "category": "sys",
+        "description": "uptime",
+        "unit": "str",
+        "active": true,
+        "last_value": "56019870"
+      },
+      "sys_hostname": {
+        "oid": "1.3.6.1.2.1.1.5.0",
+        "type": "str",
+        "category": "sys",
+        "description": "hostname",
+        "unit": "str",
+        "active": true,
+        "last_value": "MF230 Series"
+      },
+      "toner_name_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.6.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "نام تونر 1",
+        "unit": "str",
+        "active": true,
+        "last_value": "Cartridge 137"
+      },
+      "toner_max_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.8.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "ظرفیت تونر",
+        "unit": "dots",
+        "active": true,
+        "last_value": "100"
+      },
+      "toner_remain_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.9.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "باقی‌مانده تونر",
+        "unit": "dots",
+        "active": true,
+        "last_value": "11"
+      },
+      "tray1_name": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.13.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "نام سینی 1",
+        "unit": "str",
+        "active": true,
+        "last_value": "Stack Bypass"
+      },
+      "tray1_cap": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.9.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "ظرفیت سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "1"
+      },
+      "tray1_level": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.10.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "0"
+      },
+      "tray2_name": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.13.1.2",
+        "type": "str",
+        "category": "identity",
+        "description": "نام سینی 2",
+        "unit": "str",
+        "active": true,
+        "last_value": "Drawer1"
+      },
+      "tray2_cap": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.9.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "ظرفیت سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "250"
+      },
+      "tray2_level": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.10.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "سطح سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "-3"
+      },
+      "cover_status": {
+        "oid": "1.3.6.1.2.1.43.6.1.1.3.1.1",
+        "type": "int",
+        "category": "status",
+        "description": "وضعیت درب",
+        "unit": "code",
+        "active": true,
+        "last_value": "4"
+      },
+      "canon_model": {
+        "oid": "1.3.6.1.4.1.1602.1.1.1.1.0",
+        "type": "str",
+        "category": "identity",
+        "description": "مدل Canon",
+        "unit": "str",
+        "active": true,
+        "last_value": "Canon MF230 Series"
+      },
+      "canon_serial": {
+        "oid": "1.3.6.1.4.1.1602.1.2.1.4.0",
+        "type": "str",
+        "category": "identity",
+        "description": "سریال Canon",
+        "unit": "str",
+        "active": true,
+        "last_value": "YCG28785"
+      },
+      "canon_firmware": {
+        "oid": "1.3.6.1.4.1.1602.1.1.1.4.0",
+        "type": "str",
+        "category": "identity",
+        "description": "فریمور Canon",
+        "unit": "str",
+        "active": true,
+        "last_value": "2211"
+      },
+      "canon_total": {
+        "oid": "1.3.6.1.4.1.1602.1.11.2.1.1.3.1",
+        "type": "int",
+        "category": "counter",
+        "description": "کل چاپ Canon ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "103908"
+      },
+      "canon_bw": {
+        "oid": "1.3.6.1.2.1.43.10.2.1.5.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "سیاه‌سفید Canon",
+        "unit": "pages",
+        "active": true,
+        "last_value": "594"
+      },
+      "canon_copy": {
+        "oid": "1.3.6.1.4.1.1602.1.11.2.1.1.3.6",
+        "type": "int",
+        "category": "counter",
+        "description": "کپی Canon ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "7989"
+      },
+      "canon_print": {
+        "oid": "1.3.6.1.4.1.1602.1.11.2.1.1.3.9",
+        "type": "int",
+        "category": "counter",
+        "description": "پرینت Canon ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "95673"
+      },
+      "canon_scan": {
+        "oid": "1.3.6.1.4.1.1602.1.11.2.1.1.3.12",
+        "type": "int",
+        "category": "counter",
+        "description": "اسکن Canon ✓",
+        "unit": "pages",
+        "active": true,
+        "last_value": "36323"
+      }
+    },
+    "current_vals": {
+      "sys_descr": "Canon MF230 Series /P",
+      "sys_uptime": "56019870",
+      "sys_hostname": "MF230 Series",
+      "toner_name_1": "Cartridge 137",
+      "toner_max_1": "100",
+      "toner_remain_1": "11",
+      "tray1_name": "Stack Bypass",
+      "tray1_cap": "1",
+      "tray1_level": "0",
+      "tray2_name": "Drawer1",
+      "tray2_cap": "250",
+      "tray2_level": "-3",
+      "cover_status": "4",
+      "canon_model": "Canon MF230 Series",
+      "canon_serial": "YCG28785",
+      "canon_firmware": "2211",
+      "canon_total": "103908",
+      "canon_bw": "594",
+      "canon_copy": "7989",
+      "canon_print": "95673",
+      "canon_scan": "36323"
+    },
+    "rejected_oids": {},
+    "summary": {
+      "model": "Canon MF230 Series",
+      "serial": "YCG28785",
+      "brand": "canon",
+      "total_pages": 103908,
+      "toner_pct": 11,
+      "device_type": "mono"
+    }
+  },
+  "172.16.25.58": {
+    "ip": "172.16.25.58",
+    "brand": "hp",
+    "device_type": "mono",
+    "scanned_at": "2026-05-21T09:33:23.017329",
+    "scan_ms": 62,
+    "oid_total": 69,
+    "oid_active": 9,
+    "oid_inactive": 0,
+    "oid_rejected": 0,
+    "oids": {
+      "sys_descr": {
+        "oid": "1.3.6.1.2.1.1.1.0",
+        "type": "str",
+        "category": "sys",
+        "description": "توضیح سیستم",
+        "unit": "str",
+        "active": true,
+        "last_value": "HP ETHERNET MULTI-ENVIRONMENT"
+      },
+      "sys_uptime": {
+        "oid": "1.3.6.1.2.1.1.3.0",
+        "type": "int",
+        "category": "sys",
+        "description": "uptime",
+        "unit": "str",
+        "active": true,
+        "last_value": "38192726"
+      },
+      "sys_hostname": {
+        "oid": "1.3.6.1.2.1.1.5.0",
+        "type": "str",
+        "category": "sys",
+        "description": "hostname",
+        "unit": "str",
+        "active": true,
+        "last_value": "NPI4FC46A"
+      },
+      "print_total": {
+        "oid": "1.3.6.1.2.1.43.10.2.1.4.1.1",
+        "type": "int",
+        "category": "counter",
+        "description": "کل چاپ",
+        "unit": "pages",
+        "active": true,
+        "last_value": "4608"
+      },
+      "toner_name_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.6.1.1",
+        "type": "str",
+        "category": "identity",
+        "description": "نام تونر 1",
+        "unit": "str",
+        "active": true,
+        "last_value": "CC388A"
+      },
+      "toner_max_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.8.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "ظرفیت تونر",
+        "unit": "dots",
+        "active": true,
+        "last_value": "100"
+      },
+      "toner_remain_1": {
+        "oid": "1.3.6.1.2.1.43.11.1.1.9.1.1",
+        "type": "int",
+        "category": "supply",
+        "description": "باقی‌مانده تونر",
+        "unit": "dots",
+        "active": true,
+        "last_value": "50"
+      },
+      "tray1_cap": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.9.1.1",
+        "type": "int",
+        "category": "tray",
+        "description": "ظرفیت سینی 1",
+        "unit": "%",
+        "active": true,
+        "last_value": "10"
+      },
+      "tray2_cap": {
+        "oid": "1.3.6.1.2.1.43.8.2.1.9.1.2",
+        "type": "int",
+        "category": "tray",
+        "description": "ظرفیت سینی 2",
+        "unit": "%",
+        "active": true,
+        "last_value": "250"
+      }
+    },
+    "current_vals": {
+      "sys_descr": "HP ETHERNET MULTI-ENVIRONMENT",
+      "sys_uptime": "38192726",
+      "sys_hostname": "NPI4FC46A",
+      "print_total": "4608",
+      "toner_name_1": "CC388A",
+      "toner_max_1": "100",
+      "toner_remain_1": "50",
+      "tray1_cap": "10",
+      "tray2_cap": "250"
+    },
+    "rejected_oids": {},
+    "summary": {
+      "model": "NPI4FC46A",
+      "serial": "N/A",
+      "brand": "hp",
+      "total_pages": 4608,
+      "toner_pct": 50,
+      "device_type": "mono"
+    }
+  },
+  "172.16.24.63": {
+    "ip": "172.16.24.63",
+    "brand": "unknown",
+    "device_type": "mono",
+    "scanned_at": "2026-05-21T09:41:42.563150",
+    "scan_ms": 499496,
+    "oid_total": 69,
+    "oid_active": 0,
+    "oid_inactive": 0,
+    "oid_rejected": 0,
+    "oids": {},
+    "current_vals": {},
+    "rejected_oids": {},
+    "summary": {
+      "model": "Unknown",
+      "serial": "N/A",
+      "brand": "unknown",
+      "total_pages": 0,
+      "toner_pct": 0,
+      "device_type": "mono"
+    }
+  }
+}
