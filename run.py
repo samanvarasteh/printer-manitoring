@@ -12,6 +12,7 @@ import threading
 import signal
 import time
 import platform
+import webbrowser
 
 # اطمینان از اینکه ریشه پروژه در sys.path است
 _ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -106,6 +107,16 @@ def main():
 
     # پاکسازی خودکار ترمینال هر 24 ساعت
     threading.Thread(target=clear_terminal_loop, daemon=True, name="clear-terminal").start()
+
+    # Open browser automatically after a short delay
+    def open_browser():
+        time.sleep(1.5)  # Wait for Flask to start
+        try:
+            webbrowser.open(f'http://localhost:{FLASK_PORT}/')
+        except Exception as e:
+            print(f"⚠️  Could not open browser: {e}")
+    
+    threading.Thread(target=open_browser, daemon=True, name="browser-opener").start()
 
     # Flask server (debug=False برای محیط production)
     app.run(host="0.0.0.0", port=FLASK_PORT, debug=False, use_reloader=False)

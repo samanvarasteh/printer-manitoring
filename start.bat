@@ -77,26 +77,26 @@ if exist "oid_profiles.json" (echo  [OK] oid_profiles.json) else (echo  [INFO] o
 :: --- Step 5: Choose port --------------------------------
 echo [5/5] Port configuration...
 echo.
-echo  Default port: 5053
+echo  Default port: 5050
 echo  Press ENTER to keep default, or type a custom port (1024-65535):
 echo.
-set /p USER_PORT="  Port [5053]: "
-if "%USER_PORT%"=="" set USER_PORT=5053
+set /p USER_PORT="  Port [5050]: "
+if "%USER_PORT%"=="" set USER_PORT=5050
 
 :: Validate: must be numeric
 set PORT_VALID=1
 for /f "delims=0123456789" %%i in ("%USER_PORT%") do set PORT_VALID=0
 if "%PORT_VALID%"=="0" (
-    echo  [WARN] Invalid input - using default port 5053
-    set USER_PORT=5053
+    echo  [WARN] Invalid input - using default port 5050
+    set USER_PORT=5050
 )
 
 :: Patch FLASK_PORT in settings.py if changed
-if not "%USER_PORT%"=="5053" (
+if not "%USER_PORT%"=="5050" (
     python -c "import re; path='config/settings.py'; c=open(path).read(); open(path,'w').write(re.sub(r'FLASK_PORT\s*=\s*\d+','FLASK_PORT = %USER_PORT%',c))" 2>nul
     echo  [OK] Port set to %USER_PORT%
 ) else (
-    echo  [OK] Using default port 5053
+    echo  [OK] Using default port 5050
 )
 
 :: --- Launch ---------------------------------------------

@@ -476,11 +476,100 @@ function switchTab(id, el) {
 }
 
 // ══════════════════════════════════════════════════
+// TOPBAR SENSOR BARS
+// ══════════════════════════════════════════════════
+function renderTopbarSensorBars(printers) {
+  const sensorsContainer = document.getElementById('topbar-sensors');
+  if (!sensorsContainer) return;
+  
+  const sensors = printers.filter(p => p.device_type === 'sensor');
+  if (!sensors.length) {
+    sensorsContainer.innerHTML = '';
+    return;
+  }
+  
+  sensorsContainer.innerHTML = sensors.map(sensor => {
+    const c = sensor.counters || {};
+    const temp1 = c.temp1 ?? null;
+    const temp2 = c.temp2 ?? null;
+    const hum1 = c.hum1 ?? null;
+    const hum2 = c.hum2 ?? null;
+    
+    // Calculate percentages for bars (0-50°C for temp, 0-100% for humidity)
+    const tempPercent1 = temp1 !== null ? Math.min(100, (temp1 / 50) * 100) : 0;
+    const tempPercent2 = temp2 !== null ? Math.min(100, (temp2 / 50) * 100) : 0;
+    const humPercent1 = hum1 !== null ? Math.min(100, hum1) : 0;
+    const humPercent2 = hum2 !== null ? Math.min(100, hum2) : 0;
+    
+    let barRows = [];
+    
+    if (temp1 !== null) {
+      barRows.push(`
+        <div class="topbar-sensor-row">
+          <span class="topbar-sensor-icon">🌡️</span>
+          <span class="topbar-sensor-value">${temp1.toFixed(1)}°C</span>
+          <div class="topbar-sensor-bar-bg">
+            <div class="topbar-sensor-bar-fill temp" style="width: ${tempPercent1}%"></div>
+          </div>
+        </div>`);
+    }
+    
+    if (temp2 !== null) {
+      barRows.push(`
+        <div class="topbar-sensor-row">
+          <span class="topbar-sensor-icon">🌡️</span>
+          <span class="topbar-sensor-value">${temp2.toFixed(1)}°C</span>
+          <div class="topbar-sensor-bar-bg">
+            <div class="topbar-sensor-bar-fill temp" style="width: ${tempPercent2}%"></div>
+          </div>
+        </div>`);
+    }
+    
+    if (hum1 !== null) {
+      barRows.push(`
+        <div class="topbar-sensor-row">
+          <span class="topbar-sensor-icon">💧</span>
+          <span class="topbar-sensor-value">${hum1.toFixed(1)}%</span>
+          <div class="topbar-sensor-bar-bg">
+            <div class="topbar-sensor-bar-fill hum" style="width: ${humPercent1}%"></div>
+          </div>
+        </div>`);
+    }
+    
+    if (hum2 !== null) {
+      barRows.push(`
+        <div class="topbar-sensor-row">
+          <span class="topbar-sensor-icon">💧</span>
+          <span class="topbar-sensor-value">${hum2.toFixed(1)}%</span>
+          <div class="topbar-sensor-bar-bg">
+            <div class="topbar-sensor-bar-fill hum" style="width: ${humPercent2}%"></div>
+          </div>
+        </div>`);
+    }
+    
+    return `
+      <div class="topbar-sensor-bar" title="${sensor.name} (${sensor.ip})">
+        <div class="topbar-sensor-label">${sensor.nickname || sensor.name}</div>
+        <div class="topbar-sensor-container">
+          ${barRows.join('')}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════
 // OVERVIEW CARDS
 // ══════════════════════════════════════════════════
 function renderOverviewCards(printers) {
   const grid = document.getElementById('overview-grid');
-  if (!printers.length) {
+  
+  // Filter out sensors - they'll be shown in topbar bars instead
+  const nonSensorPrinters = printers.filter(p => p.device_type !== 'sensor');
+  
+  // Render sensor bars in topbar
+  renderTopbarSensorBars(printers);
+  
+  if (!nonSensorPrinters.length) {
     grid.innerHTML = '<div style="padding:60px;text-align:center;color:var(--text3);font-family:var(--mono)">پرینتری تعریف نشده</div>';
     if (sortableInstance) {
       try {
@@ -492,14 +581,14 @@ function renderOverviewCards(printers) {
   }
 
   currentPrinters = printers;
-  const order = getPrinterOrder(printers);
+  const order = getPrinterOrder(nonSensorPrinters);
   const orderedPrinters = [];
   for (const ip of order) {
-    const printer = printers.find(p => p.ip === ip);
+    const printer = nonSensorPrinters.find(p => p.ip === ip);
     if (printer) orderedPrinters.push(printer);
   }
   const foundIps = new Set(order);
-  for (const p of printers) {
+  for (const p of nonSensorPrinters) {
     if (!foundIps.has(p.ip)) orderedPrinters.push(p);
   }
 

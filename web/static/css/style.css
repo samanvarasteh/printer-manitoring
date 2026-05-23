@@ -846,3 +846,69 @@ html.light .offline-message { color: #000000; }
   color: var(--cyan);
   font-family: var(--mono);
 }
+
+/* ── Temperature Sensor Bar Styles (Topbar) ────────────────────────── */
+.topbar-sensor-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 4px;
+  min-width: 160px;
+}
+
+.topbar-sensor-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  white-space: nowrap;
+  width: 50px;
+}
+
+.topbar-sensor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.topbar-sensor-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topbar-sensor-icon {
+  font-size: 11px;
+}
+
+.topbar-sensor-value {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 35px;
+}
+
+.topbar-sensor-bar-bg {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  flex: 1;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.topbar-sensor-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.topbar-sensor-bar-fill.temp {
+  background: linear-gradient(90deg, var(--cyan), var(--blue));
+}
+
+.topbar-sensor-bar-fill.hum {
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+}
