@@ -291,21 +291,30 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
             except:
                 pass
             
-            # اگر درصد نداریم، OIDهای جایگزین را امتحان کن
-            if percent is None and brand in ["hp", "canon"]:
-                alt_percent = try_alternative_oids(ip, community, brand, name_str, snmp_version, timeout)
-                if alt_percent is not None:
-                    # برای Canon: اگر مقدار 0 است و نام کارتریج موجود است، احتمالاً خطا است
-                    # در این صورت، N/A نشان بده نه empty
-                    if brand == "canon" and alt_percent == 0 and name_str and name_str != "Unknown":
-                        log.debug(f"  Canon {ip}: Alternative OID returned 0% for {name_str}, marking as no_sensor")
-                        # علامت‌گذاری به عنوان بدون سنسور، نه خالی
-                        # نمی‌توانیم status را اینجا تغییر دهیم، بنابراین percent را None نگه می‌داریم
-                        percent = None
-                    else:
-                        percent = alt_percent
-                        rem_int = alt_percent
-                        max_int = 100
+            # اگر درصد نداریم یا برای HP بدون max موثق، OIDهای جایگزین را امتحان کن
+            # برای HP: اگر max_val None بود، ترجیح دهیم از OID جایگزین استفاده کنیم
+            if brand in ["hp", "canon"]:
+                should_try_alt = (percent is None) or (brand == "hp" and max_val is None)
+                if should_try_alt:
+                    alt_percent = try_alternative_oids(ip, community, brand, name_str, snmp_version, timeout)
+                    if alt_percent is not None:
+                        # برای Canon: اگر مقدار 0 است و نام کارتریج موجود است، احتمالاً خطا است
+                        # در این صورت، N/A نشان بده نه empty
+                        if brand == "canon" and alt_percent == 0 and name_str and name_str != "Unknown":
+                            log.debug(f"  Canon {ip}: Alternative OID returned 0% for {name_str}, marking as no_sensor")
+                            # علامت‌گذاری به عنوان بدون سنسور، نه خالی
+                            # نمی‌توانیم status را اینجا تغییر دهیم، بنابراین percent را None نگه می‌داریم
+                            percent = None
+                        else:
+                            # برای HP و Canon: استفاده از مقدار جایگزین
+                            # اگر max_val None بود، این از OID جایگزین است
+                            if brand == "hp" and max_val is None:
+                                log.debug(f"  HP {ip}: Using alternative OID {alt_percent}% (standard OID had no max) for {name_str}")
+                            elif percent is None:
+                                log.debug(f"  {brand.upper()} {ip}: Using alternative OID {alt_percent}% for {name_str}")
+                            percent = alt_percent
+                            rem_int = alt_percent
+                            max_int = 100
             
             # وضعیت
             status = "N/A"
