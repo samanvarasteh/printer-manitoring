@@ -276,3 +276,20 @@ def snmp_get_bulk(ip: str, oids: dict, community: str = "public") -> dict:
     for i, (key, oid) in enumerate(oids.items()):
         result[key] = snmp_get_with_fallback(ip, oid, community, request_id=i + 1)
     return result
+
+
+def is_network_reachable(ip: str, port: int = 161, timeout: float = 2.0) -> bool:
+    """
+    بررسی دسترسی‌پذیری شبکه با استفاده از اتصال UDP
+    (بدون SNMP، صرفاً تست شبکه)
+    """
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.settimeout(timeout)
+        # تلاش برای اتصال (UDP داتاگرام)
+        sock.connect((ip, port))
+        sock.close()
+        return True
+    except (socket.timeout, socket.error, OSError) as e:
+        log.debug(f"Network unreachable for {ip}: {e}")
+        return False

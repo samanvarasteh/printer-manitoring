@@ -15,7 +15,7 @@ from datetime import datetime
 from config.settings import POLL_INTERVAL
 from core import store
 from core.database import add_event
-from core.snmp.protocol import snmp_get_with_fallback
+from core.snmp.protocol import snmp_get_with_fallback, is_network_reachable
 from core.snmp.oid_map import OIDS
 from core.collectors.base import si, detect_brand
 
@@ -56,6 +56,14 @@ def collect(printer: dict) -> dict:
     if test is None:
         test = snmp_get_with_fallback(ip, OIDS.get("uptime", "1.3.6.1.2.1.1.3.0"), community, timeout=2.0)
     online = test is not None
+    
+    # اگر SNMP پاسخ نداد اما شبکه در دسترس است، دستگاه را آنلاین در نظر بگیر
+    # (برای دستگاه‌هایی که SNMP غیرفعال است)
+    if not online:
+        network_reachable = is_network_reachable(ip, port=161, timeout=2.0)
+        if network_reachable:
+            log.info(f"SNMP failed but network reachable for {ip}: marking as online with limited functionality")
+            online = True
 
     with store.data_lock:
         was_online = store.printer_data.get(ip, {}).get("online", None)
