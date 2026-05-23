@@ -27,9 +27,18 @@ _CANON_TONER_COLOR_MAP = {
 def _canon_toner_key(name: str) -> str:
     """استخراج کلید رنگ از نام تونر"""
     n = name.lower()
+    
+    # First try full word matches (for longer keywords like "black", "cyan", etc.)
     for kw, key in _CANON_TONER_COLOR_MAP.items():
-        if kw in n:
+        if len(kw) > 1 and kw in n:
             return key
+    
+    # Then try single-letter matches but only as complete words
+    words = n.split()
+    for kw, key in _CANON_TONER_COLOR_MAP.items():
+        if len(kw) == 1 and kw in words:
+            return key
+    
     return None
 
 

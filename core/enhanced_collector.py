@@ -163,11 +163,10 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
     if brand == "canon":
         try:
             from core.collectors.canon import collect_canon
+            import time as time_module
             # Use only the toner data from Canon collector
-            # collect_canon doesn't take timeout, so we use enhanced timeout
-            dummy_printer = {"ip": ip, "name": "", "community": community, "brand": "canon"}
-            import time
-            canon_result = collect_canon(dummy_printer, "", community, time.time())
+            canon_result = collect_canon({"ip": ip, "name": "", "community": community, "brand": "canon"}, 
+                                        "", community, time_module.time())
             if canon_result and canon_result.get("toners"):
                 # Convert Canon collector format to supplies format
                 for color_key, toner_info in canon_result["toners"].items():
