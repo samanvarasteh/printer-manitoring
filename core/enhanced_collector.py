@@ -17,7 +17,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Any
 
 from config.settings import DB_PATH, VALIDATION_LOG_FILE
-from core.snmp.protocol import snmp_get_with_fallback, snmp_get, _SNMP_VERSION_CACHE
+from core.snmp.protocol import snmp_get_with_fallback, snmp_get, _SNMP_VERSION_CACHE, is_network_reachable
 from core import store
 from core.database import add_event
 
@@ -473,10 +473,19 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
     if snmp_version is None:
         elapsed = int((time.time() - start_time) * 1000)
         _log_to_toner_report(f"   ❌ بدون پاسخ SNMP")
+        
+        # بررسی دسترسی‌پذیری شبکه
+        network_ok = is_network_reachable(ip, port=161, timeout=2.0)
+        online_status = network_ok  # اگر شبکه در دسترس است، دستگاه آنلاین است
+        
+        if network_ok:
+            log.info(f"SNMP failed but network reachable for {ip}: returning minimal data")
+            _log_to_toner_report(f"   ⚠️  SNMP خراب ولی شبکه در دسترس")
+        
         return {
             "ip": ip, "name": name, "nickname": nickname, "brand": brand,
-            "online": False, "last_poll": datetime.now().isoformat(), "poll_ms": elapsed,
-            "error": "No SNMP response",
+            "online": online_status, "last_poll": datetime.now().isoformat(), "poll_ms": elapsed,
+            "error": "No SNMP response" + (" (network reachable)" if network_ok else " (network unreachable)"),
         }
     
     # ─── اطلاعات پایه ────────────────────────────────────────────
