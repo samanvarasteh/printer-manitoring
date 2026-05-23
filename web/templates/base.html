@@ -15,7 +15,7 @@
 
     <script>
         const API = location.protocol + '//' + location.host;
-        const POLL_INT = 30;
+        window.POLL_INT = Number({{ poll_interval|default(30)|int }});
     </script>
     {% block global_scripts %}{% endblock %}
     <!-- بارگذاری Sortable قبل از dashboard.js -->

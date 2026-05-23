@@ -4,7 +4,6 @@ from core import store
 from core.database import add_event
 from core.poller import collect, poll_one
 from core.oid.scanner import scan_printer_oids
-from config.settings import POLL_INTERVAL
 
 bp = Blueprint("printers", __name__)
 
@@ -28,7 +27,7 @@ def api_printers():
         "offline": sum(1 for d in snap if d.get("online") is False),
         "poll_count": store.poll_stats["count"],
         "last_poll": store.poll_stats["last"],
-        "poll_interval": POLL_INTERVAL,
+        "poll_interval": store.get_poll_interval(),
     }})
 
 

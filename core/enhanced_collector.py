@@ -26,6 +26,10 @@ log = logging.getLogger("PrinterMonitor")
 # ─── تنظیمات ─────────────────────────────────────────────────────
 ENHANCED_TIMEOUT = 3.0   # timeout برای هر OID
 ENHANCED_MAX_SUPPLIES = 15  # حداکثر تعداد مواد مصرفی برای walk
+SOURCE_STANDARD_PRINTER_MIB = "standard_printer_mib"
+SOURCE_ALTERNATE_OID = "alternate_oid"
+SOURCE_NO_SENSOR = "no_sensor"
+SOURCE_NOT_SUPPORTED = "not_supported"
 
 # OIDهای جایگزین برای HP
 HP_ALTERNATE_OIDS = {
@@ -185,6 +189,7 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
                         "remaining": toner_info.get("remaining", -2),
                         "percent": toner_info.get("level"),
                         "status": toner_info.get("status", "unknown"),
+                        "source": toner_info.get("source", SOURCE_STANDARD_PRINTER_MIB),
                     })
                 if supplies:
                     return supplies
@@ -211,6 +216,7 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
                         "remaining": level,
                         "percent": level,
                         "status": "critical" if level <= 10 else "low" if level <= 25 else "ok",
+                        "source": SOURCE_ALTERNATE_OID,
                     })
             except:
                 pass
@@ -233,6 +239,7 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
                         "remaining": level,
                         "percent": level,
                         "status": "critical" if level <= 10 else "low" if level <= 25 else "ok",
+                        "source": SOURCE_ALTERNATE_OID,
                     })
             except:
                 pass
@@ -280,6 +287,7 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
             percent = None
             max_int = -2
             rem_int = -2
+            source = SOURCE_STANDARD_PRINTER_MIB
             
             try:
                 if max_val is not None and str(max_val).lstrip('-').isdigit():
@@ -309,6 +317,7 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
                             # علامت‌گذاری به عنوان بدون سنسور، نه خالی
                             # نمی‌توانیم status را اینجا تغییر دهیم، بنابراین percent را None نگه می‌داریم
                             percent = None
+                            source = SOURCE_NO_SENSOR
                         else:
                             # برای HP و Canon: استفاده از مقدار جایگزین
                             # اگر max_val None بود، این از OID جایگزین است
@@ -319,6 +328,7 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
                             percent = alt_percent
                             rem_int = alt_percent
                             max_int = 100
+                            source = SOURCE_ALTERNATE_OID
             
             # وضعیت
             status = "N/A"
@@ -334,6 +344,7 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
                 status = "no_sensor" if name_str and name_str != "Unknown" else "not_supported"
             elif rem_int == -3:
                 status = "not_supported"
+                source = SOURCE_NOT_SUPPORTED
             elif rem_int > 0 and max_int == -2:
                 if rem_int <= 100:
                     percent = rem_int
@@ -356,6 +367,7 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
                 "remaining": rem_int if rem_int >= 0 else ("N/A" if rem_int == -2 else "unsupported"),
                 "percent": percent,
                 "status": status,
+                "source": source,
             })
             
         except Exception as e:
@@ -595,11 +607,12 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
                 "name": s["name"],
                 "remaining": s["remaining"],
                 "max": s["max"],
+                "source": s.get("source", SOURCE_STANDARD_PRINTER_MIB),
             }
     
     # اگر تونری پیدا نشد، یک تونر مشکی پیش‌فرض
     if not toners:
-        toners["black"] = {"level": None, "status": "unknown", "name": "Toner", "remaining": -1, "max": -1}
+        toners["black"] = {"level": None, "status": "unknown", "name": "Toner", "remaining": -1, "max": -1, "source": SOURCE_NOT_SUPPORTED}
     
     # ─── هشدارها ─────────────────────────────────────────────────
     alerts = []
@@ -624,7 +637,7 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
     for color_key, t in toners.items():
         pct_str = f"{t['level']}%" if t['level'] is not None else "N/A"
         status_icon = {"ok": "✅", "low": "🟡", "critical": "🟠", "empty": "🔴"}.get(t["status"], "❓")
-        _log_to_toner_report(f"   {color_key}: {pct_str} {status_icon}")
+        _log_to_toner_report(f"   {color_key}: {pct_str} {status_icon} | source={t.get('source', SOURCE_STANDARD_PRINTER_MIB)}")
     _log_to_toner_report(f"   زمان پاسخ: {elapsed}ms")
     
     # ─── ذخیره در دیتابیس (printer_counters) ────────────────────
@@ -646,11 +659,11 @@ def collect_enhanced(printer: dict, save_to_db: bool = True) -> dict:
             import json
             toner_data = {
                 "toners": {
-                    k: {"level": v["level"], "status": v["status"], "name": v["name"]}
+                    k: {"level": v["level"], "status": v["status"], "name": v["name"], "source": v.get("source", SOURCE_STANDARD_PRINTER_MIB)}
                     for k, v in toners.items()
                 },
                 "supplies": [
-                    {"name": s["name"], "percent": s["percent"], "status": s["status"], "type": s["type_name"]}
+                    {"name": s["name"], "percent": s["percent"], "status": s["status"], "type": s["type_name"], "source": s.get("source", SOURCE_STANDARD_PRINTER_MIB)}
                     for s in supplies if s["percent"] is not None
                 ]
             }

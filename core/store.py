@@ -12,7 +12,7 @@ import os
 import threading
 import logging
 
-from config.settings import PRINTERS_FILE, DEFAULT_PRINTERS
+from config.settings import PRINTERS_FILE, DEFAULT_PRINTERS, POLL_INTERVAL
 from core.database import load_printer_counters, save_printer_counters
 
 log = logging.getLogger("PrinterMonitor")
@@ -21,10 +21,29 @@ log = logging.getLogger("PrinterMonitor")
 printers_lock = threading.Lock()
 data_lock = threading.Lock()
 _prev_lock = threading.Lock()   # قفل برای PrevStore
+poll_cfg_lock = threading.Lock()
 
 # ─── داده سراسری ────────────────────────────────────────────────
 printer_data = {}          # ip → dict داده کامل پرینتر
 poll_stats = {"count": 0, "last": None, "errors": 0}
+_poll_interval = int(POLL_INTERVAL)
+
+
+def get_poll_interval() -> int:
+    with poll_cfg_lock:
+        return int(_poll_interval)
+
+
+def set_poll_interval(seconds: int) -> int:
+    global _poll_interval
+    sec = int(seconds)
+    if sec < 5:
+        sec = 5
+    if sec > 3600:
+        sec = 3600
+    with poll_cfg_lock:
+        _poll_interval = sec
+        return _poll_interval
 
 
 # ─── کلاس ذخیره مقادیر قبلی با پشتیبان دیتابیس ────────────────────

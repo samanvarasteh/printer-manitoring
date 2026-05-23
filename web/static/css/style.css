@@ -211,7 +211,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.02) 1px,transparent 1px);background-size:15px 5px;pointer-events:none}
 
 /* ── TOPBAR ────────────────────────────────────────── */
-.topbar{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:12px;padding:0 20px;height:52px;background:rgb(0, 88, 122);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.topbar{position:sticky;top:0;z-index:210;display:flex;align-items:center;gap:12px;padding:0 20px;height:52px;background:rgb(0, 88, 122);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 .logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--cyan);letter-spacing:1.5px;white-space:nowrap}
 .logo span{color:var(--text3);font-weight:400}
 .topbar-meta{display:flex;gap:16px;font-family:var(--mono);font-size:11px;color:var(--text3);margin-right:auto}
@@ -233,12 +233,21 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .btn-yellow{background:rgba(255,215,64,.08);border-color:rgba(255,215,64,.3);color:var(--yellow)}
 .btn-yellow:hover{background:rgba(255,215,64,.18);border-color:var(--yellow)}
 .btn:active{transform:scale(.97)}
-#cbar{height:2px;background:var(--border)}
+#cbar{height:8px;background:var(--border);position:relative;cursor:pointer}
 #cfill {
   height: 100%;
   background: linear-gradient(90deg, var(--cyan), var(--blue));
   box-shadow: 0 0 8px var(--cyan);
-  transition: width 1s linear;  /* از 1s به 0.5s یا بدون تغییر */
+  transition: width 1s linear;
+}
+#cfill-time{
+  position:absolute;
+  left:8px;
+  top:-15px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text3);
+  pointer-events:none;
 }
 
 /* ── APP LAYOUT: sidebar + main ─────────────────── */
@@ -848,22 +857,40 @@ html.light .offline-message { color: #000000; }
 }
 
 /* ── Temperature Sensor Bar Styles (Topbar) ────────────────────────── */
+.topbar-sensors-strip{
+  display:flex;
+  gap:8px;
+  padding:6px 12px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:thin;
+}
+.topbar-sensors-strip:empty{
+  display:none;
+}
 .topbar-sensor-bar {
-  display: flex;
-  align-items: center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
   gap: 8px;
-  padding: 0 12px;
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 0 4px;
-  min-width: 160px;
+  padding: 8px 10px;
+  border:1px solid var(--border);
+  background:var(--bg3);
+  border-radius:8px;
+  min-width:240px;
+  flex:0 0 240px;
 }
 
 .topbar-sensor-label {
   font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
+  font-size: 11px;
+  color: var(--text2);
   white-space: nowrap;
-  width: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .topbar-sensor-container {
@@ -885,9 +912,10 @@ html.light .offline-message { color: #000000; }
 
 .topbar-sensor-value {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  min-width: 35px;
+  min-width: 52px;
+  text-align:left;
 }
 
 .topbar-sensor-bar-bg {

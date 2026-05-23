@@ -12,12 +12,12 @@ import threading
 import logging
 from datetime import datetime
 
-from config.settings import POLL_INTERVAL
 from core import store
 from core.database import add_event
 from core.snmp.protocol import snmp_get_with_fallback, is_network_reachable
 from core.snmp.oid_map import OIDS
 from core.collectors.base import si, detect_brand
+from core.collectors.toshiba import collect_toshiba
 
 # enhanced_collector — کالکتور اصلی برای همه پرینترها
 from core.enhanced_collector import collect_enhanced
@@ -93,6 +93,8 @@ def collect(printer: dict) -> dict:
     # تشخیص خودکار برند (اگر هنوز مشخص نشده)
     if not brand or brand == "unknown":
         brand = detect_brand(ip, community)
+        if brand == "unknown" and ("toshiba" in name.lower() or "e-studio" in name.lower()):
+            brand = "toshiba"
         log.info(f"  → برند شناسایی شد: {brand}")
         with store.printers_lock:
             for p in store.PRINTERS:
@@ -100,6 +102,17 @@ def collect(printer: dict) -> dict:
                     p["brand"] = brand
                     store.save_printers(store.PRINTERS)
                     break
+
+    # توشیبا: کالکتور اختصاصی (پایدارتر برای برخی مدل‌ها)
+    if brand == "toshiba":
+        try:
+            result = collect_toshiba(ip, name, community, start)
+            result["nickname"] = nickname
+            result["device_type"] = result.get("device_type", device_type)
+            return result
+        except Exception as e:
+            log.error(f"Toshiba collector failed for {ip}: {e}", exc_info=True)
+            # fallback به enhanced collector
 
     # جمع‌آوری کامل با enhanced_collector
     # (شامل: walk تونر، walk سینی، شمارنده‌های تفکیکی، ثبت در toner_report.txt)
@@ -146,7 +159,8 @@ def poll_all():
         with store.printers_lock:
             current = list(store.PRINTERS)
 
-        log.info(f"🔄 Starting poll cycle for {len(current)} devices (interval={POLL_INTERVAL}s)")
+        interval = store.get_poll_interval()
+        log.info(f"🔄 Starting poll cycle for {len(current)} devices (interval={interval}s)")
         results = {}
         processed_ips = set()
 
@@ -174,7 +188,7 @@ def poll_all():
         log.info(
             f"✅ Poll cycle done: {len(results)} devices, "
             f"{store.poll_stats['errors']} offline, "
-            f"next poll in {POLL_INTERVAL}s"
+            f"next poll in {store.get_poll_interval()}s"
         )
 
 
@@ -185,4 +199,6 @@ def polling_loop():
             poll_all()
         except Exception as e:
             log.error(f"Error in polling loop: {e}")
-        time.sleep(POLL_INTERVAL)
+        delay = max(1, store.get_poll_interval())
+        for _ in range(delay):
+            time.sleep(1)

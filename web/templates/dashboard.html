@@ -6,10 +6,7 @@
 <!-- TOPBAR -->
 <header class="topbar">
   <div class="logo">TOSHIBA<span> MONITOR</span> <span style="font-size:9px;color:var(--text3)">v2</span></div>
-  
-  <!-- Sensor bars section -->
-  <div id="topbar-sensors" style="display:flex; gap:2px; align-items:center; flex-wrap:wrap;"></div>
-  
+
   <div class="topbar-meta">
     <div class="meta-chip"><span class="meta-val g" id="m-on">—</span><span>آنلاین</span></div>
     <div class="meta-chip"><span class="meta-val r" id="m-off">—</span><span>آفلاین</span></div>
@@ -30,7 +27,11 @@
     <button class="btn btn-orange" onclick="exportJSON()">↓ JSON</button>
   </div>
 </header>
-<div id="cbar"><div id="cfill" style="width:100%"></div></div>
+<div id="topbar-sensors" class="topbar-sensors-strip"></div>
+<div id="cbar" title="برای تغییر زمان Poll کلیک کنید">
+  <div id="cfill" style="width:100%"></div>
+  <span id="cfill-time">Poll: —s</span>
+</div>
 
 <!-- APP BODY: sidebar + content -->
 <div class="app-layout">

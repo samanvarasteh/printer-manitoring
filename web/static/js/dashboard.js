@@ -52,7 +52,8 @@ function escapeHtml(str) {
 // ══════════════════════════════════════════════════
 let allData     = [];
 let allEvents   = [];
-let countdown   = POLL_INT;
+let pollInterval = Number(window.POLL_INT || 30);
+let countdown   = pollInterval;
 let countTimer  = null;
 let isFirst     = true;
 let serverInfo  = {};
@@ -324,6 +325,10 @@ async function fetchData() {
     allData   = pr.printers || [];
     allEvents = lg.events   || [];
     serverInfo = st;
+    if (typeof st?.poll_interval === 'number' && st.poll_interval > 0) {
+      pollInterval = st.poll_interval;
+      window.POLL_INT = pollInterval;
+    }
     updateMeta(pr.meta, st);
     rebuildTabs(allData);
     renderOverviewCards(allData);
@@ -490,10 +495,14 @@ function renderTopbarSensorBars(printers) {
   
   sensorsContainer.innerHTML = sensors.map(sensor => {
     const c = sensor.counters || {};
-    const temp1 = c.temp1 ?? null;
-    const temp2 = c.temp2 ?? null;
-    const hum1 = c.hum1 ?? null;
-    const hum2 = c.hum2 ?? null;
+    const asNum = (v) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : null;
+    };
+    const temp1 = asNum(c.temp1);
+    const temp2 = asNum(c.temp2);
+    const hum1 = asNum(c.hum1);
+    const hum2 = asNum(c.hum2);
     
     // Calculate percentages for bars (0-50°C for temp, 0-100% for humidity)
     const tempPercent1 = temp1 !== null ? Math.min(100, (temp1 / 50) * 100) : 0;
@@ -547,9 +556,20 @@ function renderTopbarSensorBars(printers) {
         </div>`);
     }
     
+    if (!barRows.length) {
+      barRows.push(`
+        <div class="topbar-sensor-row">
+          <span class="topbar-sensor-icon">ℹ️</span>
+          <span class="topbar-sensor-value">No data</span>
+          <div class="topbar-sensor-bar-bg">
+            <div class="topbar-sensor-bar-fill temp" style="width: 0%"></div>
+          </div>
+        </div>`);
+    }
+
     return `
       <div class="topbar-sensor-bar" title="${sensor.name} (${sensor.ip})">
-        <div class="topbar-sensor-label">${sensor.nickname || sensor.name}</div>
+        <div class="topbar-sensor-label">${escapeHtml(sensor.nickname || sensor.name)} · ${sensor.ip}</div>
         <div class="topbar-sensor-container">
           ${barRows.join('')}
         </div>
@@ -1738,13 +1758,48 @@ async function triggerPoll() {
 }
 
 function resetCountdown() {
-  countdown = POLL_INT;
+  countdown = pollInterval;
+  updatePollTimeLabel();
   if (countTimer) clearInterval(countTimer);
   countTimer = setInterval(()=>{
     countdown = Math.max(0, countdown-1);
-    document.getElementById('cfill').style.width = (countdown/POLL_INT*100)+'%';
+    document.getElementById('cfill').style.width = (countdown/pollInterval*100)+'%';
+    updatePollTimeLabel();
     if (countdown<=0) { clearInterval(countTimer); fetchData(); }
   },1000);
+}
+
+function updatePollTimeLabel() {
+  const label = document.getElementById('cfill-time');
+  if (!label) return;
+  label.textContent = `Poll: ${countdown}s / ${pollInterval}s`;
+}
+
+async function setPollIntervalFromPrompt() {
+  const value = prompt('زمان جدید Poll (ثانیه، بازه 5 تا 3600):', String(pollInterval));
+  if (value === null) return;
+  const seconds = Number(value);
+  if (!Number.isInteger(seconds) || seconds < 5 || seconds > 3600) {
+    toast('مقدار معتبر نیست (5 تا 3600)', 'e');
+    return;
+  }
+
+  try {
+    const r = await fetch(`${API}/api/poll/interval`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ seconds })
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'خطا در تنظیم زمان Poll');
+
+    pollInterval = j.poll_interval;
+    window.POLL_INT = pollInterval;
+    resetCountdown();
+    toast(`زمان Poll روی ${pollInterval} ثانیه تنظیم شد`, 's');
+  } catch (e) {
+    toast(e.message || 'خطا در تنظیم زمان Poll', 'e');
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -1934,6 +1989,8 @@ async function loadDailyChart() {
 fetchData();
 resetCountdown();
 bindNicknameModalEvents();
+document.getElementById('cbar')?.addEventListener('click', setPollIntervalFromPrompt);
+document.getElementById('cfill')?.addEventListener('click', (e) => { e.stopPropagation(); setPollIntervalFromPrompt(); });
 
 setTimeout(() => {
   if (activeTab === 'overview') {
