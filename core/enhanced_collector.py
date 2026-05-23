@@ -40,6 +40,8 @@ HP_ALTERNATE_OIDS = {
 CANON_ALTERNATE_OIDS = [
     "1.3.6.1.4.1.1602.1.2.1.1.1.1.1",
     "1.3.6.1.4.1.1602.1.2.1.1.1.2.1",
+    "1.3.6.1.4.1.1602.1.2.1.1.1.3.1",
+    "1.3.6.1.4.1.1602.1.2.1.1.1.4.1",
 ]
 
 # OID تونر Brother
@@ -157,6 +159,36 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
     """
     supplies = []
     
+    # برای Canon، روش اختصاصی (استفاده از dedicated collector)
+    if brand == "canon":
+        try:
+            from core.collectors.canon import collect_canon
+            # Use only the toner data from Canon collector
+            # collect_canon doesn't take timeout, so we use enhanced timeout
+            dummy_printer = {"ip": ip, "name": "", "community": community, "brand": "canon"}
+            import time
+            canon_result = collect_canon(dummy_printer, "", community, time.time())
+            if canon_result and canon_result.get("toners"):
+                # Convert Canon collector format to supplies format
+                for color_key, toner_info in canon_result["toners"].items():
+                    supplies.append({
+                        "index": len(supplies) + 1,
+                        "name": toner_info.get("name", color_key),
+                        "model": toner_info.get("name", color_key),
+                        "type": 3,  # toner type
+                        "type_name": "toner",
+                        "unit": "percent",
+                        "max": toner_info.get("max", 100),
+                        "remaining": toner_info.get("remaining", -2),
+                        "percent": toner_info.get("level"),
+                        "status": toner_info.get("status", "unknown"),
+                    })
+                if supplies:
+                    return supplies
+        except Exception as e:
+            log.debug(f"  Canon {ip}: Failed to use dedicated collector: {e}")
+            # Fall through to standard method
+    
     # برای Brother، روش اختصاصی
     if brand == "brother":
         toner_level = snmp_get_with_fallback(ip, BROTHER_TONER_OID, community, 
@@ -264,9 +296,17 @@ def walk_supplies_table(ip: str, community: str, brand: str = "unknown",
             if percent is None and brand in ["hp", "canon"]:
                 alt_percent = try_alternative_oids(ip, community, brand, name_str, snmp_version, timeout)
                 if alt_percent is not None:
-                    percent = alt_percent
-                    rem_int = alt_percent
-                    max_int = 100
+                    # برای Canon: اگر مقدار 0 است و نام کارتریج موجود است، احتمالاً خطا است
+                    # در این صورت، N/A نشان بده نه empty
+                    if brand == "canon" and alt_percent == 0 and name_str and name_str != "Unknown":
+                        log.debug(f"  Canon {ip}: Alternative OID returned 0% for {name_str}, marking as no_sensor")
+                        # علامت‌گذاری به عنوان بدون سنسور، نه خالی
+                        # نمی‌توانیم status را اینجا تغییر دهیم، بنابراین percent را None نگه می‌داریم
+                        percent = None
+                    else:
+                        percent = alt_percent
+                        rem_int = alt_percent
+                        max_int = 100
             
             # وضعیت
             status = "N/A"
