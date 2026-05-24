@@ -220,6 +220,7 @@
     "name": "TOSHIBA e-STUDIO2555C",
     "community": "public",
     "nickname": "",
-    "device_type": "mono"
+    "device_type": "color",
+    "brand": "toshiba"
   }
 ]

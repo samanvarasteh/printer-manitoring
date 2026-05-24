@@ -12,6 +12,12 @@ from core.snmp.protocol import snmp_get_bulk, snmp_get_with_fallback
 from core.snmp.oid_map import OIDS, PAPER_SIZE_MAP, TONER_STATUS, TONER_LEVEL
 from core.collectors.base import si, ss, _counters_event, validate_counter_consistency
 from core import store
+from core.source_config import (
+    SOURCE_TOPACCESS_SCRAPE,
+    SOURCE_USAGE_ESTIMATED,
+    SOURCE_SNMP_WALK,
+    SOURCE_NE_FLAG_ESTIMATED,
+)
 
 log = logging.getLogger("PrinterMonitor")
 
@@ -176,7 +182,7 @@ def _walk_toner_remaining(ip: str, community: str, timeout: float = 2.0) -> dict
                         "status": st,
                         "remaining": rem_int,
                         "max": max_int,
-                        "source": "snmp_walk",
+                        "source": SOURCE_SNMP_WALK,
                     }
                     
                     log.debug(f"Toshiba walk {ip}: {color}={percent}% (rem={rem_int}, max={max_int})")
@@ -197,6 +203,10 @@ def collect_toshiba(ip: str, name: str, community: str, start: float) -> dict:
     prev_a4 = prev.get("a4_total", 0)
 
     raw = snmp_get_bulk(ip, OIDS, community)
+    if not any(v is not None for v in raw.values()):
+        raise RuntimeError(f"No Toshiba-specific OIDs responded for {ip}")
+    if all(raw.get(k) is None for k in ("model", "print_total", "print_bw", "print_fc", "toner_black_status")):
+        raise RuntimeError(f"Toshiba-specific payload is empty for {ip}")
     elapsed = int((time.time() - start) * 1000)
 
     ut_raw = raw.get("uptime")
@@ -230,7 +240,7 @@ def collect_toshiba(ip: str, name: str, community: str, start: float) -> dict:
             level = scraped[col]
             st = ("ok" if level > 50 else "low" if level > 25 else
                   "critical" if level > 0 else "empty")
-            source = "topaccess_scrape"
+            source = SOURCE_TOPACCESS_SCRAPE
             
         # اولویت ۲: Usage-based estimation
         elif usage > 0:
@@ -253,13 +263,13 @@ def collect_toshiba(ip: str, name: str, community: str, start: float) -> dict:
                 
             st = ("ok" if level > 50 else "low" if level > 25 else
                   "critical" if level > 0 else "empty")
-            source = "usage_estimated"
+            source = SOURCE_USAGE_ESTIMATED
             
         # اولویت ۳: SNMP Walk
         elif walk_result and col in walk_result:
             level = walk_result[col]["level"]
             st = walk_result[col]["status"]
-            source = "snmp_walk"
+            source = SOURCE_SNMP_WALK
             
         # اولویت ۴: NE_LEVEL
         else:
@@ -276,7 +286,7 @@ def collect_toshiba(ip: str, name: str, community: str, start: float) -> dict:
             else:
                 level = None
                 st = TONER_STATUS.get(ne, "ok")
-            source = "ne_flag_estimated"
+            source = SOURCE_NE_FLAG_ESTIMATED
 
         toners[col] = {
             "level": level,

@@ -858,14 +858,15 @@ html.light .offline-message { color: #000000; }
 
 /* ── Temperature Sensor Bar Styles (Topbar) ────────────────────────── */
 .topbar-sensors-strip{
-  display:flex;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:8px;
-  padding:6px 12px;
+  padding:8px 12px;
   background:var(--bg2);
   border-bottom:1px solid var(--border);
-  overflow-x:auto;
-  overflow-y:hidden;
+  overflow:hidden;
   scrollbar-width:thin;
+  align-items:stretch;
 }
 .topbar-sensors-strip:empty{
   display:none;
@@ -873,14 +874,14 @@ html.light .offline-message { color: #000000; }
 .topbar-sensor-bar {
   display:flex;
   flex-direction:column;
-  justify-content:center;
-  gap: 8px;
+  justify-content:flex-start;
+  gap:8px;
   padding: 8px 10px;
   border:1px solid var(--border);
   background:var(--bg3);
   border-radius:8px;
-  min-width:240px;
-  flex:0 0 240px;
+  min-width:0;
+  height:100%;
 }
 
 .topbar-sensor-label {
@@ -894,16 +895,18 @@ html.light .offline-message { color: #000000; }
 }
 
 .topbar-sensor-container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:4px;
+  flex:1;
+  min-width:0;
 }
 
 .topbar-sensor-row {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width:0;
 }
 
 .topbar-sensor-icon {
@@ -916,6 +919,7 @@ html.light .offline-message { color: #000000; }
   font-weight: 700;
   min-width: 52px;
   text-align:left;
+  flex-shrink:0;
 }
 
 .topbar-sensor-bar-bg {
@@ -923,6 +927,7 @@ html.light .offline-message { color: #000000; }
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   flex: 1;
+  min-width:0;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -939,4 +944,10 @@ html.light .offline-message { color: #000000; }
 
 .topbar-sensor-bar-fill.hum {
   background: linear-gradient(90deg, var(--blue), var(--cyan));
+}
+@media(max-width:900px){
+  .topbar-sensors-strip{
+    grid-template-columns:1fr;
+    overflow-x:auto;
+  }
 }

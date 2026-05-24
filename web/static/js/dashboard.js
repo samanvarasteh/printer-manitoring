@@ -6,6 +6,13 @@
   if (saved === 'light') {
     document.documentElement.classList.add('light');
   }
+
+  function updateLatestPrintTimestamp(events) {
+    latestPrintTimestamp = null;
+    if (!Array.isArray(events) || !events.length) return;
+    const printEvent = events.find(e => e && e.type === 'PRINT' && e.timestamp);
+    if (printEvent?.timestamp) latestPrintTimestamp = printEvent.timestamp;
+  }
 })();
 
 function toggleTheme() {
@@ -57,6 +64,7 @@ let countdown   = pollInterval;
 let countTimer  = null;
 let isFirst     = true;
 let serverInfo  = {};
+let latestPrintTimestamp = null;
 
 const PAGE_SIZE = 20;
 const _pgState  = {};
@@ -325,6 +333,7 @@ async function fetchData() {
     allData   = pr.printers || [];
     allEvents = lg.events   || [];
     serverInfo = st;
+    updateLatestPrintTimestamp(allEvents);
     if (typeof st?.poll_interval === 'number' && st.poll_interval > 0) {
       pollInterval = st.poll_interval;
       window.POLL_INT = pollInterval;
@@ -1772,7 +1781,10 @@ function resetCountdown() {
 function updatePollTimeLabel() {
   const label = document.getElementById('cfill-time');
   if (!label) return;
-  label.textContent = `Poll: ${countdown}s / ${pollInterval}s`;
+  const printTime = latestPrintTimestamp
+    ? new Date(latestPrintTimestamp).toLocaleTimeString('fa-IR')
+    : '—';
+  label.textContent = `Poll: ${countdown}s / ${pollInterval}s | Print: ${printTime}`;
 }
 
 async function setPollIntervalFromPrompt() {

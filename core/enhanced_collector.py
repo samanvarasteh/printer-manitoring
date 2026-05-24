@@ -20,16 +20,18 @@ from config.settings import DB_PATH, VALIDATION_LOG_FILE
 from core.snmp.protocol import snmp_get_with_fallback, snmp_get, _SNMP_VERSION_CACHE, is_network_reachable
 from core import store
 from core.database import add_event
+from core.source_config import (
+    SOURCE_STANDARD_PRINTER_MIB,
+    SOURCE_ALTERNATE_OID,
+    SOURCE_NO_SENSOR,
+    SOURCE_NOT_SUPPORTED,
+)
 
 log = logging.getLogger("PrinterMonitor")
 
 # ─── تنظیمات ─────────────────────────────────────────────────────
 ENHANCED_TIMEOUT = 3.0   # timeout برای هر OID
 ENHANCED_MAX_SUPPLIES = 15  # حداکثر تعداد مواد مصرفی برای walk
-SOURCE_STANDARD_PRINTER_MIB = "standard_printer_mib"
-SOURCE_ALTERNATE_OID = "alternate_oid"
-SOURCE_NO_SENSOR = "no_sensor"
-SOURCE_NOT_SUPPORTED = "not_supported"
 
 # OIDهای جایگزین برای HP
 HP_ALTERNATE_OIDS = {
